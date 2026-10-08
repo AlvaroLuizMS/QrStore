@@ -1,7 +1,19 @@
+function data(urlRecebida) {
+	const urlParams = new URL(urlRecebida);
+
+	// Extrai o ic
+	const ic = urlParams.searchParams.get("ic");
+	// Extrai o lote
+	const lote = urlParams.searchParams.get("NUMEROLOTE")
+
+	alert(ic);
+}
+
+
 function onScanSuccess(decodedText, decodedResult) {
 	// Exibe o dado extraido do QRcode 
 	document.getElementById('result').innerText = `Resultado: ${decodedText}`;
-	console.log(`Codigo lido: ${decodedText}`, decodedResult);
+	data(decodedText);
 }
 
 function onScanFailure(error) {
@@ -15,3 +27,5 @@ let html5QrcodeScanner = new Html5QrcodeScanner(
 );
 
 html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+
+
