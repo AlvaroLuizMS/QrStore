@@ -5,20 +5,40 @@
 <head>
 	<meta charset="pt-BR">
 	<meta name="viewport" content="widht=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<title>QRcode data</title>
+	<link rel="stylesheet" type="text/css" href="sobre.css">
+	<title>QRStore</title>
+<!DOCTYPE html>
+
+<head>
+	<meta charset="pt-BR">
+	<meta name="viewport" content="widht=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="sobre.css">
+	<title>QrStore</title>
 
 	<!-- Biblioteca html5-code via CDN  -->
 	<script src="https://unpkg.com/html5-qrcode"></script>
-
 </head>
 
 <body>
-	<h2>Escanear QR Code</h2>
-	<div id="reader"></div>
-	<div id="result"> Aguardando leitura...</div>
-<button onclick="arquivo()">Baixar</button>
-<button onclick="limpar()">Limpar</button>
+	<div class="main">
+		<div class="cabecalho">
+			<h1>Informe a Carga</h1>
+		</div>
+		<div class="container">
+			<div id="boxCarga">
+				<input id="inputCarga" placeholder="Numero da carga....">
+				<button class="btn-send" onclick="sendCarga()">Gravar numero</button>
+					<div class="boxScanner">
+                       <div id="reader"></div>
+					   <div id="result"> Aguardando leitura...</div>
+                    </div>
+					<div class="div-btn">
+						<button class="btn-send1" onclick="arquivo()">Baixar</button>
+						<button class="btn-send1" onclick="limpar()">Limpar</button>
+					</div>
+			</div>
+		</div>
+	</div>
+
  <script src="script.js"></script>
- <script src="dataBase.js"></script>
 </body>

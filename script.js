@@ -12,7 +12,6 @@ function data(urlRecebida) {
             return;
         }
 
-        // VERIFICAÇÃO DE DUPLICIDADE:
         // Verifica se já existe algum item no dataBase com o mesmo IC
         const jaExiste = dataBase.some(item => item.ic === ic);
 
@@ -54,8 +53,6 @@ function arquivo() {
     }
 
     // Mapeia cada objeto formatando com IC e LOTE na mesma linha
-    // Exemplo de saída: "IC: 12345 - Lote: LOTE987"
-    // Ou se preferir separado por vírgula (formato CSV): `${objeto.ic},${objeto.lote}`
     const linhasDeTexto = dataBase.map(objeto => `IC: ${objeto.ic} | Lote: ${objeto.lote}`);
     
     // Junta todas as linhas separadas por quebra de linha (\n)
@@ -78,4 +75,5 @@ function arquivo() {
 
 function limpar() {
 	dataBase = []
+    document.getElementById('result').innerText = "Aguardando leitura..."
 }
