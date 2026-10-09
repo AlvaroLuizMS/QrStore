@@ -4,25 +4,29 @@ function data(urlRecebida) {
     try {
         const urlParams = new URL(urlRecebida);
 
-        // Extrai 'ic' e 'NUMEROLOTE' da query string
         const ic = urlParams.searchParams.get("ic");
         const lote = urlParams.searchParams.get("NUMEROLOTE");
 
-        // Valida se os parâmetros realmente existem na URL
         if (!ic || !lote) {
-            document.getElementById('result').innerText = "Erro: URL lida não contém 'ic' ou 'NUMEROLOTE'.";
+            document.getElementById('result').innerText = "QR Code lido não possui 'ic' ou 'NUMEROLOTE' válidos!";
             return;
         }
 
-        // Exibe o resultado na tela
-        document.getElementById('result').innerText = `Embalagem ${ic}, Lote: ${lote}. Gravado com sucesso!`;
+        // VERIFICAÇÃO DE DUPLICIDADE:
+        // Verifica se já existe algum item no dataBase com o mesmo IC
+        const jaExiste = dataBase.some(item => item.ic === ic);
 
-        // Grava os dados no Array
+        if (jaExiste) {
+            document.getElementById('result').innerText = `Atenção: Embalagem ${ic} já foi gravada anteriormente!`;
+            return; // Interrompe a função e não adiciona ao dataBase
+        }
+
+        // Se não for duplicado, grava os dados
+        document.getElementById('result').innerText = `Embalagem ${ic}, Lote: ${lote}. Gravado com sucesso!`;
         dataBase.push({ ic, lote });
 
     } catch (error) {
-        // Trata o caso onde o texto escaneado não é uma URL válida
-        document.getElementById('result').innerText = "Erro: O código escaneado não é uma URL válida.";
+        document.getElementById('result').innerText = "Erro: O QR Code lido não é um link/URL válido.";
     }
 }
 
