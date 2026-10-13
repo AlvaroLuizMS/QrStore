@@ -22,19 +22,19 @@
 <body>
 	<div class="main">
 		<div class="cabecalho">
-			<h1>Informe a Carga</h1>
+			<h1 id="title-cabecalho">Informe a Carga</h1>
 		</div>
 		<div class="container">
 			<div id="boxCarga">
 				<input id="inputCarga" placeholder="Numero da carga....">
-				<button class="btn-send" onclick="sendCarga()">Gravar numero</button>
+				<button class="btn-send" onclick="sendCarga('inputCarga')">Salvar</button>
 					<div class="boxScanner">
                        <div id="reader"></div>
 					   <div id="result"> Aguardando leitura...</div>
                     </div>
 					<div class="div-btn">
 						<button class="btn-send1" onclick="arquivo()">Baixar</button>
-						<button class="btn-send1" onclick="limpar()">Limpar</button>
+						<button class="btn-send1" id="btn-send2" onclick="limpar()">Limpar</button>
 					</div>
 			</div>
 		</div>

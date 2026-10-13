@@ -1,14 +1,56 @@
 let dataBase = [];
+let numCarga = " ";
+
+//oculta o scanner/buttons
+let boxScanner = document.querySelector(".boxScanner")
+let btnScanner = document.querySelector(".btn-send1") 
+let btnScanner2 = document.querySelector("#btn-send2")
+
+boxScanner.setAttribute('hidden', '')
+btnScanner.setAttribute('hidden', '')
+btnScanner2.setAttribute('hidden', '')
+
+function sendCarga(idNumCarga) {
+
+    // Armazena o valor do input na var numCarga
+    numCarga = document.getElementById(idNumCarga).value
+
+    if (numCarga === "") {
+        window.alert("Digite o numero da carga.")
+        return;
+    }
+    
+    const titleCabecalho = document.querySelector('#title-cabecalho')
+    const inputCarga = document.querySelector('#inputCarga')
+    const btnSend = document.querySelector('.btn-send')
+
+    // pos armazenamento oculta os inputs/button/h1
+    titleCabecalho.setAttribute('hidden', '')
+    inputCarga.setAttribute('hidden', '')
+    btnSend.setAttribute('hidden', '')
+
+    //devolve o scanner/buttons
+    boxScanner.removeAttribute('hidden', '')
+    btnScanner.removeAttribute('hidden', '')
+    btnScanner2.removeAttribute('hidden', '')
+}
 
 function data(urlRecebida) {
-    try {
-        const urlParams = new URL(urlRecebida);
 
+    if (!numCarga || numCarga.trim() === "") {
+        window.alert("Por favor, digite e grave o número da Carga antes de escanear!")
+        return; 
+    }
+
+    try {
+        //Trata os dados lidos
+        const urlParams = new URL(urlRecebida);
         const ic = urlParams.searchParams.get("ic");
         const lote = urlParams.searchParams.get("NUMEROLOTE");
-
+        
+        //Testa se o Qrcode lido é o correto 
         if (!ic || !lote) {
-            document.getElementById('result').innerText = "QR Code lido não possui 'ic' ou 'NUMEROLOTE' válidos!";
+            document.getElementById('result').innerText = "Erro na leitura!";
             return;
         }
 
@@ -52,6 +94,11 @@ function arquivo() {
         return;
     }
 
+    if (!numCarga || numCarga.trim() === "") {
+        window.alert("Por favor, digite e grave o número da Carga antes de escanear!")
+        return; 
+    }
+
     // Mapeia cada objeto formatando com IC e LOTE na mesma linha
     const linhasDeTexto = dataBase.map(objeto => `IC: ${objeto.ic} | Lote: ${objeto.lote}`);
     
@@ -64,7 +111,7 @@ function arquivo() {
     // Cria o link para download
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "Carga.txt";
+    link.download = `Carga ${numCarga}.txt`;
 
     // Dispara o download
     document.body.appendChild(link);
@@ -76,4 +123,22 @@ function arquivo() {
 function limpar() {
 	dataBase = []
     document.getElementById('result').innerText = "Aguardando leitura..."
+
+    const titleCabecalho = document.querySelector('#title-cabecalho')
+    const inputCarga = document.querySelector('#inputCarga')
+    const btnSend = document.querySelector('.btn-send')
+
+    // pos limpeza devolve os inputs/button/h1
+    titleCabecalho.removeAttribute('hidden', '')
+    inputCarga.removeAttribute('hidden', '')
+    btnSend.removeAttribute('hidden', '')
+
+    //add placeholder no input
+    inputCarga.value = ""
+    inputCarga.setAttribute('placeholder', 'Numero da carga....')
+
+    //devolve o boxScanner
+    boxScanner.setAttribute('hidden', '')
+    btnScanner.setAttribute('hidden', '')
+    btnScanner2.setAttribute('hidden', '')
 }
