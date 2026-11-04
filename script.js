@@ -89,18 +89,22 @@ html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 
 // Download do arquivo TXT
 function arquivo() {
+
     if (dataBase.length === 0) {
         alert("Nenhuma embalagem foi gravada!");
         return;
     }
 
     if (!numCarga || numCarga.trim() === "") {
-        window.alert("Por favor, digite e grave o número da Carga antes de escanear!")
+        window.alert("Por favor, digite e grave o número da Carga antes de escanear!");
         return; 
     }
 
-    // Mapeia cada objeto formatando com IC e LOTE na mesma linha
-    const linhasDeTexto = dataBase.map(objeto => `IC: ${objeto.ic} | Lote: ${objeto.lote}`);
+    // 1. Cria uma cópia do dataBase e ordena em ordem crescente pelo 'ic'
+    const dataBaseOrdenado = [...dataBase].sort((a, b) => a.ic.localeCompare(b.ic, undefined, { numeric: true }));
+
+    // 2. Mapeia cada objeto da lista ORDENADA formatando com IC e LOTE na mesma linha
+    const linhasDeTexto = dataBaseOrdenado.map(objeto => `IC: ${objeto.ic} | Lote: ${objeto.lote}`);
     
     // Junta todas as linhas separadas por quebra de linha (\n)
     const conteudo = linhasDeTexto.join("\n");
