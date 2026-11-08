@@ -1,4 +1,3 @@
-
 let dataBase = [];
 let numCarga = " ";
 
@@ -33,8 +32,8 @@ function sendCarga(idNumCarga) {
     if (titleCabecalho) titleCabecalho.setAttribute('hidden', '');
     if (inputCarga) inputCarga.setAttribute('hidden', '');
     if (btnSend) btnSend.setAttribute('hidden', '');
-    if (quickLabel) quickLabel.setAttribute('hidden', '');       // Oculta o texto "Escolha Rápida"
-    if (shortcutsBox) shortcutsBox.setAttribute('hidden', '');   // Oculta os botões de atalho
+    if (quickLabel) quickLabel.setAttribute('hidden', '');      // Oculta o texto "Escolha Rápida"
+    if (shortcutsBox) shortcutsBox.setAttribute('hidden', '');  // Oculta os botões de atalho
 
     // Devolve o scanner e os botões de ação do leitor
     if (boxScanner) boxScanner.removeAttribute('hidden', '');
@@ -91,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (typeof Html5QrcodeScanner !== "undefined") {
             let html5QrcodeScanner = new Html5QrcodeScanner(
                 "reader",
-                { fps: 5, qrbox: { width: 250, height: 250 } },
+                { fps: 10, qrbox: { width: 200, height: 200 } },
                 /* verbose= */ false
             );
             html5QrcodeScanner.render(onScanSuccess, onScanFailure);
@@ -105,18 +104,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Download do arquivo TXT
 function arquivo() {
-
     if (dataBase.length === 0) {
         alert("Nenhuma embalagem foi gravada para esta carga!");
         return;
     }
 
     if (!numCarga || numCarga.trim() === "") {
-        window.alert("Por favor, digite e grave o número da Carga antes de escanear!")
+        window.alert("Por favor, digite e grave o número da Carga antes de escanear!");
         return; 
     }
 
-    // Mapeia cada objeto formatando com IC e LOTE na mesma linha
+    // Pega a data atual do sistema formatada (DD/MM/AAAA)
+    const agora = new Date();
+    const dia = String(agora.getDate()).padStart(2, '0');
+    const mes = String(agora.getMonth() + 1).padStart(2, '0');
+    const ano = agora.getFullYear();
+    const dataFormatada = `${dia}/${mes}/${ano}`;
+
+    // Monta o texto do cabeçalho solicitado
+    const textoCabecalho = `Carga ${dataFormatada} - ${numCarga.trim().toUpperCase()}`;
+    const linhaDivisora = "--------------------------------------------------";
+
+    // Centraliza o texto do cabeçalho com base no tamanho da linha divisora (50 caracteres)
+    let cabecalhoCentralizado = textoCabecalho;
+    if (textoCabecalho.length < linhaDivisora.length) {
+        const espacosTotal = linhaDivisora.length - textoCabecalho.length;
+        const espacosEsquerda = Math.floor(espacosTotal / 2);
+        cabecalhoCentralizado = " ".repeat(espacosEsquerda) + textoCabecalho;
+    }
+
+    // Cria o bloco do cabeçalho alinhado/centralizado
+    const cabecalhoArquivo = `${cabecalhoCentralizado}\n${linhaDivisora}`;
+    
+    // Mapeia cada objeto formatado com IC e LOTE
     const linhasDeTexto = dataBase.map(objeto => `IC: ${objeto.ic} | Lote: ${objeto.lote}`);
     
     // Junta tudo separando por quebras de linha
@@ -127,7 +147,7 @@ function arquivo() {
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     
-    // O nome do arquivo salvo no celular também levará a data organizada
+    // O nome do arquivo salvo no celular
     link.download = `Carga_${dia}-${mes}-${ano}_${numCarga.replace(/[^a-zA-Z0-9]/g, "_")}.txt`;
 
     document.body.appendChild(link);
