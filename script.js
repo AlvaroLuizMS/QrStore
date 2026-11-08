@@ -68,7 +68,7 @@ function data(urlRecebida) {
         }
 
         // Se não for duplicado, grava os dados
-        document.getElementById('result').innerText = `Bag ${ic} gravado com sucesso!`;
+        document.getElementById('result').innerText = `Embalagem ${ic}, Lote: ${lote}. Gravado com sucesso!`;
         dataBase.push({ ic, lote });
 
     } catch (error) {
@@ -81,7 +81,7 @@ function onScanSuccess(decodedText, decodedResult) {
 }
 
 function onScanFailure(error) {
-    // Falhas de leitura contínuas da câmera (deixado vazio para não travar a tela)
+    // Falhas de leitura contínuas da câmera (pode deixar vazio)
 }
 
 // Inicialização segura que espera a biblioteca carregar antes de rodar o leitor
@@ -104,46 +104,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Download do arquivo TXT
 function arquivo() {
+
     if (dataBase.length === 0) {
         alert("Nenhuma embalagem foi gravada para esta carga!");
         return;
     }
 
     if (!numCarga || numCarga.trim() === "") {
-        window.alert("Por favor, registre o tratamento antes de baixar o arquivo.");
+        window.alert("Por favor, digite e grave o número da Carga antes de escanear!")
         return; 
     }
 
-    // 1. Obtém e formata a data atual (DD/MM/AAAA)
-    const hoje = new Date();
-    const dia = String(hoje.getDate()).padStart(2, '0');
-    const mes = String(hoje.getMonth() + 1).padStart(2, '0'); // Meses começam em 0
-    const ano = hoje.getFullYear();
-    const dataFormatada = `${dia}/${mes}/${ano}`;
-
-    // 2. Cria o texto do título solicitado
-    const tituloTexto = `Carga ${dataFormatada} - ${numCarga}`;
-    
-    // 3. Define o tamanho da linha guia (divisória) para calcular a centralização
-    const tamanhoLinha = 50; 
-    const linhaDivisora = "-".repeat(tamanhoLinha);
-
-    // 4. Lógica para centralizar o título baseado no tamanho da linha divisória
-    let tituloCentralizado = tituloTexto;
-    if (tituloTexto.length < tamanhoLinha) {
-        const espaçosFaltantes = tamanhoLinha - tituloTexto.length;
-        const espaçosEsquerda = Math.floor(espaçosFaltantes / 2);
-        tituloCentralizado = " ".repeat(espaçosEsquerda) + tituloTexto;
-    }
-
-    // 5. Estrutura o conteúdo final do arquivo TXT
-    const cabecalhoArquivo = `${tituloCentralizado}\n${linhaDivisora}`;
+    // Mapeia cada objeto formatando com IC e LOTE na mesma linha
     const linhasDeTexto = dataBase.map(objeto => `IC: ${objeto.ic} | Lote: ${objeto.lote}`);
     
     // Junta tudo separando por quebras de linha
     const conteudo = [cabecalhoArquivo, ...linhasDeTexto].join("\n");
 
-    // 6. Dispara o download do arquivo convertido
+    // Cria o Blob com o conteúdo
     const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
