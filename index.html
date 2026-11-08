@@ -1,83 +1,79 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="https://unpkg.com/html5-qrcode" defer></script>
-	<link rel="icon" type="image/png" href="img/esfera-icon.png">
-	<title>EsferaSCAN</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/html5-qrcode" defer></script>
+    <link rel="icon" type="image/png" href="img/esfera-icon.png">
+    <title>EsferaSCAN</title>
 
-	<!-- Arquivo de estilização externo -->
-	<link rel="stylesheet" type="text/css" href="sobre.css">
+    <!-- Arquivo de estilização externo -->
+    <link rel="stylesheet" type="text/css" href="sobre.css">
 
-	<!-- Biblioteca html5-qrcode via CDN -->
-	<script src="https://unpkg.com"></script>
+    <!-- Biblioteca html5-qrcode via CDN -->
+    <script src="https://unpkg.com"></script>
 </head>
 
 <body>
-	<div class="main">
-<div class="cabecalho">
-    <div style="width: 120px; height: 120px; margin: 0 auto 10px auto; display: flex; align-items: center; justify-content: center;">
-        <svg xmlns="http://w3.org" viewBox="0 0 500 400" width="100%" height="100%">
-          <rect width="100%" height="100%" fill="transparent"/>
-          <g transform="translate(0, 0)">
-            <img id="icon" src="/img/esfera-icon.png">
-          </g>
-        </svg>
+    <div class="main">
+        <div class="cabecalho">
+            <!-- Substituído o SVG por uma div estruturada para exibir a imagem corretamente -->
+            <div style="width: 120px; height: 120px; margin: 0 auto 10px auto; display: flex; align-items: center; justify-content: center;">
+                <img id="icon" src="img/esfera-icon.png" alt="EsferaSCAN Icon" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            </div>
+            
+            <h1 id="title-cabecalho">ESFERA<span style="color: #00A651;">SCAN</span></h1>
+        </div>
+        
+        <div class="container">
+            <div id="boxCarga">
+                
+                <!-- Campo Datalist -->
+                <input type="text" id="inputCarga" name="tratamento" list="lista-tratamentos" placeholder="Selecione ou digite o tratamento...">
+
+                <datalist id="lista-tratamentos">
+                    <option value="FORTENZA SOLO + PREMIUM 60">
+                    <option value="FORTENZA SOLO">
+                    <option value="FORTENZA SOLO + PREMIUM 60 + DUPLO INOC">
+                    <option value="STANDAK TOP + VOTIVO PRIME + INOCULANTE">
+                    <option value="TVP + PREMIUM 60 + N">
+                    <option value="DERM">
+                    <option value="DERM + PREMIUM 60">
+                    <option value="DERMACOR + PREMIUM 60">
+                    <option value="DERMACOR + PREMIUM 60 + N">
+                    <option value="ESFERA MAX">
+                    <option value="ESFERA PRO">
+                    <option value="AVICTA COMPLETO">
+                    <option value="ESFERA POWER + INOCULANTE">
+                </datalist>
+
+                <!-- Botões de Atalho para Preenchimento Rápido -->
+                <span class="quick-label">Escolha Rápida:</span>
+                <div class="shortcuts">
+                    <button type="button" class="btn-shortcut" onclick="document.getElementById('inputCarga').value='FORTENZA SOLO'">Fortenza Solo</button>
+                    <button type="button" class="btn-shortcut" onclick="document.getElementById('inputCarga').value='DERMACOR + PREMIUM 60'">Dermacor + P60</button>
+                    <button type="button" class="btn-shortcut" onclick="document.getElementById('inputCarga').value='FORTENZA SOLO + PREMIUM 60'">Fortenza + P60</button>
+                    <button type="button" class="btn-shortcut" onclick="document.getElementById('inputCarga').value='ESFERA MAX'">Esfera Max</button>
+                </div>
+
+                <!-- Ação de Salvar Principal -->
+                <button class="btn-send" onclick="sendCarga('inputCarga')">Salvar Carga</button>
+                
+                <!-- Leitor de Código de Barras / QR Code -->
+                <div class="boxScanner">
+                    <div id="reader"></div>
+                    <div id="result">Aguardando leitura...</div>
+                </div>
+                
+                <!-- Botões Utilitários Inferiores -->
+                <div class="div-btn">
+                    <button class="btn-send1" onclick="arquivo()">Baixar</button>
+                    <button class="btn-send1" id="btn-send2" onclick="limpar()">Limpar</button>
+                </div>
+            </div>
+        </div>
     </div>
     
-    <h1 id="title-cabecalho">ESFERA<span style="color: #00A651;">SCAN</span></h1>
-</div>
-		
-		<div class="container">
-			<div id="boxCarga">
-				
-				<!-- Campo Datalist -->
-				<input type="text" id="inputCarga" name="tratamento" list="lista-tratamentos" placeholder="Selecione ou digite o tratamento...">
-
-				<datalist id="lista-tratamentos">
-					<option value="FORTENZA SOLO + PREMIUM 60">
-					<option value="FORTENZA SOLO">
-					<option value="FORTENZA SOLO + PREMIUM 60 + DUPLO INOC">
-					<option value="STANDAK TOP + VOTIVO PRIME + INOCULANTE">
-					<option value="TVP + PREMIUM 60 + N">
-					<option value="DERM">
-					<option value="DERM + PREMIUM 60">
-					<option value="DERMACOR + PREMIUM 60">
-					<option value="DERMACOR + PREMIUM 60 + N">
-					<option value="ESFERA MAX">
-					<option value="ESFERA PRO">
-					<option value="AVICTA COMPLETO">
-					<option value="ESFERA POWER + INOCULANTE">
-				</datalist>
-
-				<!-- Botões de Atalho para Preenchimento Rápido -->
-				<span class="quick-label">Escolha Rápida:</span>
-				<div class="shortcuts">
-					<button type="button" class="btn-shortcut" onclick="document.getElementById('inputCarga').value='FORTENZA SOLO'">Fortenza Solo</button>
-					<button type="button" class="btn-shortcut" onclick="document.getElementById('inputCarga').value='DERMACOR + PREMIUM 60'">Dermacor + P60</button>
-					<button type="button" class="btn-shortcut" onclick="document.getElementById('inputCarga').value='FORTENZA SOLO + PREMIUM 60'">Fortenza + P60</button>
-					<button type="button" class="btn-shortcut" onclick="document.getElementById('inputCarga').value='ESFERA MAX'">Esfera Max</button>
-				</div>
-
-				<!-- Ação de Salvar Principal -->
-				<button class="btn-send" onclick="sendCarga('inputCarga')">Salvar Carga</button>
-				
-				<!-- Leitor de Código de Barras / QR Code -->
-				<div class="boxScanner">
-					<div id="reader"></div>
-					<div id="result">Aguardando leitura...</div>
-				</div>
-				
-				<!-- Botões Utilitários Inferiores -->
-				<div class="div-btn">
-					<button class="btn-send1" onclick="arquivo()">Baixar</button>
-					<button class="btn-send1" id="btn-send2" onclick="limpar()">Limpar</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
