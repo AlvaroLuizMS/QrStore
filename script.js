@@ -62,7 +62,7 @@ function data(urlRecebida) {
             return; // Interrompe a função e não adiciona ao dataBase
         }
 
-        // Se não for duplicado, grava os dados
+        // Se nao for duplicado, grava os dados
         document.getElementById('result').innerText = `Embalagem ${ic}, Lote: ${lote}. Gravado com sucesso!`;
         dataBase.push({ ic, lote });
 
@@ -76,7 +76,7 @@ function onScanSuccess(decodedText, decodedResult) {
 }
 
 function onScanFailure(error) {
-    // Falhas de leitura contínuas da câmera (pode deixar vazio)
+    // Falhas de leitura contonuas da camera (pode deixar vazio)
 }
 
 let html5QrcodeScanner = new Html5QrcodeScanner(
@@ -100,16 +100,16 @@ function arquivo() {
         return; 
     }
 
-    // 1. Cria uma cópia do dataBase e ordena em ordem crescente pelo 'ic'
+    // Cria uma copia do dataBase e ordena em ordem crescente pelo 'ic'
     const dataBaseOrdenado = [...dataBase].sort((a, b) => a.ic.localeCompare(b.ic, undefined, { numeric: true }));
 
-    // 2. Mapeia cada objeto da lista ORDENADA formatando com IC e LOTE na mesma linha
+    // Mapeia cada objeto da lista ORDENADA formatando com IC e LOTE na mesma linha
     const linhasDeTexto = dataBaseOrdenado.map(objeto => `IC: ${objeto.ic} | Lote: ${objeto.lote}`);
     
     // Junta todas as linhas separadas por quebra de linha (\n)
     const conteudo = linhasDeTexto.join("\n");
 
-    // Cria o Blob com o conteúdo
+    // Cria o Blob com o conteudo
     const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
 
     // Cria o link para download
