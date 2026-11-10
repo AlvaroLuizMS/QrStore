@@ -8,12 +8,12 @@ let btnScanner2 = document.querySelector("#btn-send2");
 
 // Seleciona os novos elementos de atalho do HTML
 let quickLabel = document.querySelector(".quick-label");
-let shortcutsBox = document.querySelector(".shortcuts");
+let shortcutsBox = document.querySelector(".shortcutsBox");
 
 // Oculta o scanner/buttons ao iniciar a página
-if (boxScanner) boxScanner.setAttribute('hidden', '');
-if (btnScanner) btnScanner.setAttribute('hidden', '');
-if (btnScanner2) btnScanner2.setAttribute('hidden', '');
+if (boxScanner) boxScanner.style.display = 'none';
+if (btnScanner) btnScanner.style.display = 'none';
+if (btnScanner2) btnScanner2.style.display = 'none';
 
 function sendCarga(idNumCarga) {
     // Armazena o valor do input na var numCarga
@@ -23,22 +23,26 @@ function sendCarga(idNumCarga) {
         window.alert("Por favor, selecione ou digite o tratamento da semente.");
         return;
     }
-    
+
     const titleCabecalho = document.querySelector('#title-cabecalho');
+    const logo = document.querySelector('#icon');
     const inputCarga = document.querySelector('#inputCarga');
     const btnSend = document.querySelector('.btn-send');
 
-    // Pós armazenamento, oculta os inputs, botões principais e ATALHOS
-    if (titleCabecalho) titleCabecalho.setAttribute('hidden', '');
-    if (inputCarga) inputCarga.setAttribute('hidden', '');
-    if (btnSend) btnSend.setAttribute('hidden', '');
-    if (quickLabel) quickLabel.setAttribute('hidden', '');      // Oculta o texto "Escolha Rápida"
-    if (shortcutsBox) shortcutsBox.setAttribute('hidden', '');  // Oculta os botões de atalho
+    // Pós armazenamento, oculta os inputs e botões principais
+    if (titleCabecalho) titleCabecalho.style.display = 'none';
+    if (icon) icon.style.display = 'none';
+    if (inputCarga) inputCarga.style.display = 'none';
+    if (btnSend) btnSend.style.display = 'none';
+    
+    // OCULTAR ATALHOS (Usando style.display para garantir que suma)
+    if (quickLabel) quickLabel.style.display = 'none'; 
+    if (shortcutsBox) shortcutsBox.style.display = 'none'; 
 
     // Devolve o scanner e os botões de ação do leitor
-    if (boxScanner) boxScanner.removeAttribute('hidden', '');
-    if (btnScanner) btnScanner.removeAttribute('hidden', '');
-    if (btnScanner2) btnScanner2.removeAttribute('hidden', '');
+    if (boxScanner) boxScanner.style.display = 'block'; // ou 'flex' dependendo do seu layout
+    if (btnScanner) btnScanner.style.display = 'inline-block';
+    if (btnScanner2) btnScanner2.style.display = 'inline-block';
 }
 
 function data(urlRecebida) {
@@ -90,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (typeof Html5QrcodeScanner !== "undefined") {
             let html5QrcodeScanner = new Html5QrcodeScanner(
                 "reader",
-                { fps: 10, qrbox: { width: 200, height: 200 } },
+                { fps: 10, qrbox: { width: 250, height: 250 } },
                 /* verbose= */ false
             );
             html5QrcodeScanner.render(onScanSuccess, onScanFailure);
@@ -136,8 +140,13 @@ function arquivo() {
     // Cria o bloco do cabeçalho alinhado/centralizado
     const cabecalhoArquivo = `${cabecalhoCentralizado}\n${linhaDivisora}`;
     
-    // Mapeia cada objeto formatado com IC e LOTE
-    const linhasDeTexto = dataBase.map(objeto => `IC: ${objeto.ic} | Lote: ${objeto.lote}`);
+    // Cria uma cópia ordenada do banco de dados para o arquivo
+    const dadosOrdenados = [...dataBase].sort((a, b) => {
+        return a.ic.localeCompare(b.ic, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    // Mapeia cada objeto formatado com IC e LOTE (usando a lista ordenada)
+    const linhasDeTexto = dadosOrdenados.map(objeto => `IC: ${objeto.ic} | Lote: ${objeto.lote}`);
     
     // Junta tudo separando por quebras de linha
     const conteudo = [cabecalhoArquivo, ...linhasDeTexto].join("\n");
@@ -165,11 +174,15 @@ function limpar() {
     const btnSend = document.querySelector('.btn-send');
 
     // Pós limpeza, devolve a tela inicial completa incluindo os ATALHOS
-    if (titleCabecalho) titleCabecalho.removeAttribute('hidden', '');
-    if (inputCarga) inputCarga.removeAttribute('hidden', '');
-    if (btnSend) btnSend.removeAttribute('hidden', '');
-    if (quickLabel) quickLabel.removeAttribute('hidden', '');     // Reexibe o texto "Escolha Rápida"
-    if (shortcutsBox) shortcutsBox.removeAttribute('hidden', ''); // Reexibe os botões de atalho
+    if (titleCabecalho) titleCabecalho.style.display = '';
+    if (icon) icon.style.display = '';
+    if (btnSend) btnSend.style.display = '';
+    if (inputCarga) inputCarga.style.display = '';
+    if (btnSend) btnSend.style.display = '';
+    
+    // REEXIBIR ATALHOS (Remove o 'none' para adotar o padrão original do CSS)
+    if (quickLabel) quickLabel.style.display = ''; 
+    if (shortcutsBox) shortcutsBox.style.display = ''; 
 
     // Reseta o input para o estado inicial
     if (inputCarga) {
@@ -178,7 +191,7 @@ function limpar() {
     }
 
     // Oculta novamente o painel do scanner
-    if (boxScanner) boxScanner.setAttribute('hidden', '');
-    if (btnScanner) btnScanner.setAttribute('hidden', '');
-    if (btnScanner2) btnScanner2.setAttribute('hidden', '');
+    if (boxScanner) boxScanner.style.display = 'none';
+    if (btnScanner) btnScanner.style.display = 'none';
+    if (btnScanner2) btnScanner2.style.display = 'none';
 }

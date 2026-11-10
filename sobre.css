@@ -13,7 +13,7 @@ body {
 
 .main {
 	display: flex;
-	width: 100%;
+	width: 80%;
 	min-height: 60%;
 	max-width: 400px; /* Garante que fique perfeito e centralizado no celular */
 	justify-content: center;
@@ -88,7 +88,7 @@ body {
 	padding-left: 2px;
 }
 
-.shortcuts {
+.shortcutsBox {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 8px;
